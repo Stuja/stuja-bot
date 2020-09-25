@@ -1,5 +1,5 @@
 <h1 align="center">
-    Telegram bot 
+    Stuja bot 
     <br/>
     <img alt="Bot image" title="Bot image" src="images/logo.jpg" width="340">
     <br/>

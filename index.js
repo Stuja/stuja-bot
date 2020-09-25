@@ -25,3 +25,4 @@ bot.onText(/hola/, (msg) => {
   // send back a message with the name of the user
   bot.sendMessage(chatId, "Hola " + msg.from.first_name);
 });
+
