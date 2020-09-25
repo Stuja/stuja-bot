@@ -11,3 +11,9 @@
 </p>
 
 State: `In progress`
+
+## Interesting lectures 📚
+
+* [Bots: An introduction for developers](https://core.telegram.org/bots)
+* [Your first Telegram Bot](https://aabedraba.com/taller-gdg)
+
