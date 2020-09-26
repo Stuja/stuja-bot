@@ -16,17 +16,27 @@ State: `In progress`
 
 ## Installation ⚒️
 
-1. Clone the project
+1. **Clone** the project
    `git clone https://github.com/Stuja/stuja-bot.git`
 
-2. Change directory
+2. **Change directory**
    `cd stuja-bot`
 
-3. Install packages
+3. **Install** packages
    `npm install`
 
-4. Run the project
+4. **Create a file** called `.dev` and copy the information from `dev.example`
+
+5. **Complete** `.dev` with your secret information, like your `TELEGRAM_TOKEN`
+
+6. **Run** the project
    `npm start`
+
+   If you are in development mode:
+
+   `npm run dev`
+
+
 
 ## Interesting lectures 📚
 
