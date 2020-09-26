@@ -26,3 +26,19 @@ bot.onText(/hola/, (msg) => {
   bot.sendMessage(chatId, "Hola " + msg.from.first_name);
 });
 
+
+bot.onText(/welcome/, (msg) => {
+  const chatId = msg.chat.id;
+
+  let members_count = bot.getChatMembersCount(chatId)
+  .then(function(data) {
+      bot.sendMessage(msg.chat.id, "You are: " + data);
+      return data;
+  });
+
+  console.log(members_count);
+
+  //bot.sendMessage(chatId, "Bienvenido " + username);
+});
+
+bot.on("polling_error", (err) => console.log(err));
