@@ -1,0 +1,24 @@
+{
+  "name": "stuja-bot",
+  "version": "1.0.0",
+  "description": "Bot for the Telegram group of Computer Engineering.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stuja/stuja-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Stuja/stuja-bot/issues"
+  },
+  "homepage": "https://github.com/Stuja/stuja-bot#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "node-telegram-bot-api": "^0.50.0"
+  }
+}
