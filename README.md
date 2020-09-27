@@ -47,5 +47,5 @@ State: `In progress`
 
 ## Contributing 
 
-We are very happy that you encourage us to collaborate, please read our [`CONTRIBUTING.md`](doc/CONTRIBUTING.md) guide before 😊
+We would be really happy if you decide to contribute. Please read our [`CONTRIBUTING.md`](doc/CONTRIBUTING.md) guide before 😊
 
