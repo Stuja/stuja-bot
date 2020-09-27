@@ -43,3 +43,9 @@ State: `In progress`
 * [Bots: An introduction for developers](https://core.telegram.org/bots)
 * [Your first Telegram Bot](https://aabedraba.com/taller-gdg)
 
+
+
+## Contributing 
+
+We are very happy that you encourage us to collaborate, please read our [`CONTRIBUTING.md`](doc/CONTRIBUTING.md) guide before 😊
+
