@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Stuja/stuja-bot#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
+    "firebase": "^7.21.1",
     "node-telegram-bot-api": "^0.50.0",
     "nodemon": "^2.0.4"
   }
