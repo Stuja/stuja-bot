@@ -17,7 +17,7 @@ const options = {
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, options);
 bot.setWebHook(
-  "https://stuja-bot-ciu4jjvvsq-ew.a.run.app:80/bot" + config.telegramToken
+  "https://stuja-bot-ciu4jjvvsq-ew.a.run.app:443/bot" + config.telegramToken
 );
 
 bot.onText(/hola/, (msg) => {
