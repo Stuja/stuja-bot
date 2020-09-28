@@ -2,14 +2,16 @@ process.env.NTBA_FIX_319 = 1;
 
 const TelegramBot = require('node-telegram-bot-api');
 const config = require("./config");
-const token = config.telegramToken;
+const TOKEN = config.telegramToken;
+
+const token = TOKEN;
 
 const options = {
-    /* webHook: {
+    webHook: {
         port: process.env.PORT,
-    } */
+    } 
     // to run local node, comment webhook and uncomment polling
-    polling: true
+    //polling: true
 };
 
 // Create a bot that uses 'polling' to fetch new updates
