@@ -7,9 +7,7 @@ const TOKEN = config.telegramToken;
 const token = TOKEN;
 
 const options = {
-  webHook: {
-    port: process.env.PORT,
-  },
+  webHook: true,
   // to run local node, comment webhook and uncomment polling
   // polling: true
 };
@@ -17,7 +15,7 @@ const options = {
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, options);
 bot.setWebHook(
-  "https://stuja-bot-ciu4jjvvsq-ew.a.run.app:443/bot" + config.telegramToken
+  "https://stuja-bot-ciu4jjvvsq-ew.a.run.app/bot" + config.telegramToken
 );
 
 bot.onText(/hola/, (msg) => {
