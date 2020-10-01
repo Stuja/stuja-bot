@@ -2,9 +2,7 @@ process.env.NTBA_FIX_319 = 1;
 
 const TelegramBot = require("node-telegram-bot-api");
 const config = require("./config");
-const TOKEN = config.telegramToken;
-
-const token = TOKEN;
+const token = config.telegramToken;
 
 const options = {
   webHook: {
