@@ -25,9 +25,9 @@ State: `In progress`
 3. **Install** packages
    `npm install`
 
-4. **Create a file** called `.dev` and copy the information from `dev.example`
+4. **Create a file** called `.env` and copy the information from `env.example`
 
-5. **Complete** `.dev` with your secret information, like your `TELEGRAM_TOKEN`
+5. **Complete** `.env` with your secret information, like your `TELEGRAM_TOKEN`
 
 6. **Run** the project
    `npm start`
