@@ -3,6 +3,7 @@ process.env.NTBA_FIX_319 = 1;
 const TelegramBot = require("node-telegram-bot-api");
 const config = require("./config");
 const token = config.telegramToken;
+var utils = require("./utils.js");
 
 const runningLocal = false;
 
@@ -31,10 +32,11 @@ bot.onText(/hola/, (msg) => {
   bot.sendMessage(chatId, "Hola " + msg.from.first_name);
 });
 
-bot.on("new_chat_members", (msg) => {
+bot.onText(/set_welcome/, (msg) => {
   const chatId = msg.chat.id;
-  const username = msg.new_chat_participant.username;
-  bot.sendMessage(chatId, "Bienvenido " + username);
+  const input = msg.text;
+  const welcomeMessage = utils.getWelcomefromInput(input);
+  utils.setWelcomeMessage(chatId, welcomeMessage);
 });
 
 bot.on("polling_error", (err) => console.log(err));
