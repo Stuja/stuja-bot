@@ -32,6 +32,12 @@ bot.onText(/hola/, (msg) => {
   bot.sendMessage(chatId, "Hola " + msg.from.first_name);
 });
 
+bot.on("new_chat_members", (msg) => {
+  const chatId = msg.chat.id;
+  const username = msg.new_chat_participant.username;
+  bot.sendMessage(chatId, "Bienvenido " + username);
+});
+
 bot.onText(/set_welcome/, (msg) => {
   const chatId = msg.chat.id;
   const input = msg.text;
