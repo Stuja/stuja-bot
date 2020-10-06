@@ -34,7 +34,11 @@ bot.onText(/hola/, (msg) => {
 
 bot.on("new_chat_members", async (msg) => {
   const chatId = msg.chat.id;
-  const username = msg.new_chat_participant.username;
+  const username =
+    msg.new_chat_participant.username === undefined
+      ? msg.new_chat_participant.first_name
+      : msg.new_chat_participant.username;
+  console.log(username);
   const welcomeMessage = await utils.getWelcomeMessage(chatId, username);
   bot.sendMessage(chatId, welcomeMessage);
 });
