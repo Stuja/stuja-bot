@@ -32,10 +32,11 @@ bot.onText(/hola/, (msg) => {
   bot.sendMessage(chatId, "Hola " + msg.from.first_name);
 });
 
-bot.on("new_chat_members", (msg) => {
+bot.on("new_chat_members", async (msg) => {
   const chatId = msg.chat.id;
   const username = msg.new_chat_participant.username;
-  bot.sendMessage(chatId, "Bienvenido " + username);
+  const welcomeMessage = await utils.getWelcomeMessage(chatId, username);
+  bot.sendMessage(chatId, welcomeMessage);
 });
 
 bot.onText(/set_welcome/, (msg) => {

@@ -28,7 +28,18 @@ function getWelcomefromInput(input) {
   return input.split("/set_welcome ")[1];
 }
 
+async function getWelcomeMessage(id, username) {
+  return await database
+    .ref(id + "/welcome")
+    .child('welcome')
+    .once('value')
+    .then((snapshot) => {
+      return snapshot.val().replace("$username", username);
+    });
+}
+
 module.exports = {
   setWelcomeMessage,
   getWelcomefromInput,
+  getWelcomeMessage,
 };
