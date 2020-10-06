@@ -4,13 +4,18 @@ const TelegramBot = require("node-telegram-bot-api");
 const config = require("./config");
 const token = config.telegramToken;
 
-const options = {
-  webHook: {
-    port: process.env.PORT,
-  },
-  // to run local node, comment webhook and uncomment polling
-  // polling: true
-};
+const runningLocal = false;
+
+var options;
+if (runningLocal) {
+  options = { polling: true };
+} else {
+  options = {
+    webHook: {
+      port: process.env.PORT,
+    },
+  };
+}
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, options);
