@@ -63,14 +63,22 @@ async function getWelcomeMessage(id, username) {
     });
 }
 
-function addQuestion(chatId, creator, poll) {
+function createQuestion(chatId, creator, poll) {
   const creation_date = new Date();
   const pollId = poll.id;
   database.ref(chatId + "/questions/" + pollId).set({
     id: poll.id,
-    date: creation_date.getTime(),
+    creation_date: creation_date.getTime(),
     creator: creator,
     question: poll.question,
+  });
+}
+
+function updateQuestion(chatId, poll) {
+  const ending_time = new Date();
+  const pollId = poll.id;
+  database.ref(chatId + "/questions/" + pollId).update({
+    ending_time: ending_time.getTime(),
     likes: poll.options[0].voter_count,
     dislikes: poll.options[1].voter_count,
     total_voter_count: poll.total_voter_count,
@@ -87,11 +95,12 @@ function getUserName(sender) {
 
 module.exports = {
   setWelcomeMessage,
-  addQuestion,
+  createQuestion,
+  updateQuestion,
   getContentFromCommand,
   getWelcomeMessage,
   getUserName,
   icons,
   errorsMessages,
-  infoMessages, 
+  infoMessages,
 };
