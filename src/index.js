@@ -58,8 +58,10 @@ bot.onText(/q/, (msg) => {
       parse_mode: "HTML",
     });
   } else {
-    console.log(question);
-    bot.sendPoll(msg.chat.id, question, [icons.like, icons.dislike]);
+    bot.sendPoll(msg.chat.id, question, [
+      utils.icons.like,
+      utils.icons.dislike,
+    ]);
   }
 });
 
@@ -69,7 +71,11 @@ bot.onText(/stop/, (msg) => {
       bot.sendMessage(msg.chat.id, utils.errorsMessages.closed_poll);
     } else {
       var replyMessageId = msg.reply_to_message.message_id;
-      console.log(msg.reply_to_message.poll);
+      utils.addQuestion(
+        msg.chat.id,
+        utils.getUserName(msg.chat),
+        msg.reply_to_message.poll
+      );
       bot.stopPoll(msg.chat.id, replyMessageId);
     }
   } else {

@@ -45,10 +45,6 @@ function setWelcomeMessage(id, welcomeMessage) {
   });
 }
 
-function getContentFromCommand(command, input) {
-  return input.split(command)[1];
-}
-
 async function getWelcomeMessage(id, username) {
   return await database
     .ref(id + "/welcome")
@@ -59,12 +55,31 @@ async function getWelcomeMessage(id, username) {
     });
 }
 
+function addQuestion(chatId, creator, poll) {
+  const creation_date = new Date();
+  const pollId = poll.id;
+  database.ref(chatId + "/questions/" + pollId).set({
+    id: poll.id,
+    date: creation_date.getTime(),
+    creator: creator,
+    question: poll.question,
+    likes: poll.options[0].voter_count,
+    dislikes: poll.options[1].voter_count,
+    total_voter_count: poll.total_voter_count,
+  });
+}
+
+function getContentFromCommand(command, input) {
+  return input.split(command)[1];
+}
+
 function getUserName(sender) {
   return sender.username === undefined ? sender.first_name : sender.username;
 }
 
 module.exports = {
   setWelcomeMessage,
+  addQuestion,
   getContentFromCommand,
   getWelcomeMessage,
   getUserName,
