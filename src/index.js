@@ -50,4 +50,16 @@ bot.onText(/set_welcome/, (msg) => {
   utils.setWelcomeMessage(chatId, welcomeMessage);
 });
 
+bot.onText(/q/, (msg) => {
+  const input = msg.text;
+  const question = utils.getContentFromCommand("/q ", input);
+  bot.sendPoll(msg.chat.id, question, ["👍", "👎"]);
+});
+
+bot.onText(/stop/, (msg) => {
+  var replyMessageId = msg.reply_to_message.message_id;
+  console.log(replyMessageId);
+  bot.stopPoll(msg.chat.id, replyMessageId);
+});
+
 bot.on("polling_error", (err) => console.log(err));
