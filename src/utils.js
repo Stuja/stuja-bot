@@ -24,8 +24,8 @@ function setWelcomeMessage(id, welcomeMessage) {
   });
 }
 
-function getWelcomefromInput(input) {
-  return input.split("/set_welcome ")[1];
+function getContentFromCommand(command, input) {
+  return input.split(command)[1];
 }
 
 async function getWelcomeMessage(id, username) {
@@ -40,6 +40,6 @@ async function getWelcomeMessage(id, username) {
 
 module.exports = {
   setWelcomeMessage,
-  getWelcomefromInput,
+  getContentFromCommand,
   getWelcomeMessage,
 };

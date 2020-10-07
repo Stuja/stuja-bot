@@ -46,7 +46,7 @@ bot.on("new_chat_members", async (msg) => {
 bot.onText(/set_welcome/, (msg) => {
   const chatId = msg.chat.id;
   const input = msg.text;
-  const welcomeMessage = utils.getWelcomefromInput(input);
+  const welcomeMessage = utils.getContentFromCommand("/set_welcome ", input);
   utils.setWelcomeMessage(chatId, welcomeMessage);
 });
 
