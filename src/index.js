@@ -53,13 +53,30 @@ bot.onText(/set_welcome/, (msg) => {
 bot.onText(/q/, (msg) => {
   const input = msg.text;
   const question = utils.getContentFromCommand("/q ", input);
-  bot.sendPoll(msg.chat.id, question, ["👍", "👎"]);
+  if (question === undefined) {
+    bot.sendMessage(msg.chat.id, utils.errorsMessages.no_question, {
+      parse_mode: "HTML",
+    });
+  } else {
+    console.log(question);
+    bot.sendPoll(msg.chat.id, question, [icons.like, icons.dislike]);
+  }
 });
 
 bot.onText(/stop/, (msg) => {
-  var replyMessageId = msg.reply_to_message.message_id;
-  console.log(replyMessageId);
-  bot.stopPoll(msg.chat.id, replyMessageId);
+  if (msg.reply_to_message != undefined) {
+    if (msg.reply_to_message.poll.is_closed) {
+      bot.sendMessage(msg.chat.id, utils.errorsMessages.closed_poll);
+    } else {
+      var replyMessageId = msg.reply_to_message.message_id;
+      console.log(msg.reply_to_message.poll);
+      bot.stopPoll(msg.chat.id, replyMessageId);
+    }
+  } else {
+    bot.sendMessage(msg.chat.id, utils.errorsMessages.select_poll, {
+      parse_mode: "HTML",
+    });
+  }
 });
 
 bot.on("polling_error", (err) => console.log(err));
