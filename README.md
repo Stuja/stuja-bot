@@ -42,6 +42,8 @@ State: `In progress`
 
 * [Bots: An introduction for developers](https://core.telegram.org/bots)
 * [Your first Telegram Bot](https://aabedraba.com/taller-gdg)
+* [¿Cómo integrar las encuestas en nuestro Bot de Telegram?](https://tecnonucleous.com/2019/05/02/crear-encuestas-telegram-desde-bot-nodejs/)
+* [¿Cómo enviar encuestas 2.0 con nuetro Bot de Telegram?](https://tecnonucleous.com/2020/02/13/como-enviar-encuestas-2-0-con-nuetro-bot-de-telegram/)
 
 
 
