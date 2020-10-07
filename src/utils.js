@@ -35,6 +35,14 @@ const errorsMessages = {
     icons.invalid_operation +
     " " +
     "Ups, no has hecho ninguna pregunta: \n<code>/q + pregunta</code>",
+  no_answer:
+    icons.invalid_operation +
+    " " +
+    "Ups, no has respondido: \n<code>/a + respuesta</code>",
+};
+
+const infoMessages = {
+  closed_poll: icons.info + " " + "La encuesta ha concluido.",
 };
 
 function setWelcomeMessage(id, welcomeMessage) {
@@ -85,4 +93,5 @@ module.exports = {
   getUserName,
   icons,
   errorsMessages,
+  infoMessages, 
 };
