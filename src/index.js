@@ -33,7 +33,9 @@ bot.onText(/\/hola/, (msg) => {
 bot.on("new_chat_members", async (msg) => {
   const username = utils.getUserName(msg.new_chat_participant);
   const welcomeMessage = await utils.getWelcomeMessage(msg.chat.id, username);
-  bot.sendMessage(msg.chat.id, welcomeMessage);
+  if (welcomeMessage != undefined) {
+    bot.sendMessage(msg.chat.id, welcomeMessage);
+  }
 });
 
 bot.onText(/\/set_welcome/, (msg) => {
@@ -51,7 +53,6 @@ bot.onText(/\/q/, async (msg) => {
     });
   } else {
     if (databaseOn) {
-      console.log(utils.getUserName(msg.from));
       utils.addQuestionToDatabase(
         msg.chat.id,
         msg.message_id,
@@ -78,18 +79,20 @@ bot.onText(/\/a/, (msg) => {
       "/q",
       msg.reply_to_message.text
     );
-    bot.sendPoll(msg.chat.id, "Q: " + question + "\nA: " + answer, [
-      utils.icons.like,
-      utils.icons.dislike,
-    ]).then(payload => {
-      utils.addAnswerToDatabase(
-        msg.chat.id,
-        payload.poll.id,
-        answer,
-        utils.getUserName(msg.from),
-        msg.reply_to_message.message_id
-      );
-    });
+    bot
+      .sendPoll(msg.chat.id, "Q: " + question + "\nA: " + answer, [
+        utils.icons.like,
+        utils.icons.dislike,
+      ])
+      .then((payload) => {
+        utils.addAnswerToDatabase(
+          msg.chat.id,
+          payload.poll.id,
+          answer,
+          utils.getUserName(msg.from),
+          msg.reply_to_message.message_id
+        );
+      });
   }
 });
 

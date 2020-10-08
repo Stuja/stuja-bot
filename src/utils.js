@@ -47,7 +47,7 @@ const infoMessages = {
 
 function setWelcomeMessage(chatId, welcomeMessage) {
   const creation_date = new Date();
-  database.ref("/welcomes/" + chatId).set({
+  database.ref("/chats/" + chatId + "/welcome/").set({
     welcome: welcomeMessage,
     date: creation_date.getTime(),
   });
@@ -55,20 +55,32 @@ function setWelcomeMessage(chatId, welcomeMessage) {
 
 async function getWelcomeMessage(chatId, username) {
   return await database
-    .ref("/welcomes/" + chatId)
+    .ref("/chats/" + chatId + "/welcome/")
     .child("welcome")
     .once("value")
     .then((snapshot) => {
-      return snapshot.val().replace("$username", username);
+      if (snapshot.val() != null) {
+        return snapshot.val().replace("$username", username);
+      } else {
+        return undefined;
+      }
     });
+}
+
+function getQuestionHash(chatId, msgId) {
+  return String.prototype.concat(chatId, msgId);
 }
 
 function addQuestionToDatabase(chatId, msgId, question, author) {
   const creationDate = new Date();
-  database.ref("/questions/" + chatId + "/" + msgId).set({
+  const questionHash = getQuestionHash(chatId, msgId);
+  database.ref("/questions/" + questionHash).set({
     creation_date: creationDate.getTime(),
     author: author,
     question: question,
+  });
+  database.ref("/chats/" + chatId + "/questions/").set({
+    question_id: questionHash,
   });
 }
 
@@ -80,16 +92,16 @@ function addAnswerToDatabase(
   questionId
 ) {
   const creationDate = new Date();
+  const questionHash = getQuestionHash(chatId, questionId);
   database.ref("/answers/" + answerId).set({
     creation_date: creationDate.getTime(),
     answer: answer,
     author: answerAuthor,
-    chat_id: chatId,
-    question_id: questionId,
+    question_id: questionHash,
   });
-  database
-    .ref("/questions/" + chatId + "/" + questionId + "/answers")
-    .set({ answer_id: answerId });
+  database.ref("/questions/" + questionHash + "/answers/" + answerId).set({
+    answer_id: answerId,
+  });
 }
 
 function updateAnswerOnDatabase(poll) {
@@ -98,7 +110,6 @@ function updateAnswerOnDatabase(poll) {
     dislikes: poll.options[1].voter_count,
     total_voter_count: poll.total_voter_count,
   });
-  console.log(poll);
 }
 
 function getContentFromCommand(command, input) {
