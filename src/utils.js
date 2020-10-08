@@ -79,7 +79,7 @@ function addQuestionToDatabase(chatId, msgId, question, author) {
     author: author,
     question: question,
   });
-  database.ref("/chats/" + chatId + "/questions/").set({
+  database.ref("/chats/" + chatId + "/questions/" + questionHash).set({
     question_id: questionHash,
   });
 }
