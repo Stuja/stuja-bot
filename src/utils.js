@@ -43,6 +43,7 @@ const errorsMessages = {
 
 const infoMessages = {
   closed_poll: icons.info + " " + "La encuesta ha concluido.",
+  no_questions: icons.info + " " + "Aún no hay preguntas.S",
 };
 
 function setWelcomeMessage(chatId, welcomeMessage) {
@@ -120,6 +121,16 @@ function getUserName(sender) {
   return sender.username === undefined ? sender.first_name : sender.username;
 }
 
+async function getLastsQuestionsFromDatabase(chatId) {
+  console.log("====");
+  const data =  await database
+    .ref("chats/" + chatId + "/questions/")
+    .orderByKey()
+    .limitToLast(5).on("child_added", snapshot =>{
+      console.log(snapshot.val().question_id);
+    });
+}
+
 module.exports = {
   setWelcomeMessage,
   addQuestionToDatabase,
@@ -128,6 +139,7 @@ module.exports = {
   getWelcomeMessage,
   getUserName,
   updateAnswerOnDatabase,
+  getLastsQuestionsFromDatabase,
   icons,
   errorsMessages,
   infoMessages,

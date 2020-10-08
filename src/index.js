@@ -100,4 +100,8 @@ bot.on("poll", (poll) => {
   utils.updateAnswerOnDatabase(poll);
 });
 
+bot.onText(/\/list/, (msg) => {
+  utils.getLastsQuestionsFromDatabase(msg.chat.id);
+});
+
 bot.on("polling_error", (err) => console.log(err));
