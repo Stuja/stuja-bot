@@ -44,6 +44,9 @@ State: `In progress`
 * [Your first Telegram Bot](https://aabedraba.com/taller-gdg)
 * [¿Cómo integrar las encuestas en nuestro Bot de Telegram?](https://tecnonucleous.com/2019/05/02/crear-encuestas-telegram-desde-bot-nodejs/)
 * [¿Cómo enviar encuestas 2.0 con nuetro Bot de Telegram?](https://tecnonucleous.com/2020/02/13/como-enviar-encuestas-2-0-con-nuetro-bot-de-telegram/)
+* [The Firebase Database For SQL Developers (PlayList on YouTube)](https://www.youtube.com/watch?v=WacqhiI-g_o&list=PLl-K7zZEsYLlP-k-RKFa7RyNPa9_wCH2s)
+* [Firebase: Reference method](https://firebase.google.com/docs/reference/js/firebase.database.Reference)
+* [Firebase: Indexing data](https://firebase.google.com/docs/database/security/indexing-data) 
 
 
 
