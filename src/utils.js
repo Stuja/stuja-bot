@@ -63,14 +63,13 @@ async function getWelcomeMessage(id, username) {
     });
 }
 
-function createQuestion(chatId, creator, poll) {
-  const creation_date = new Date();
-  const pollId = poll.id;
-  database.ref(chatId + "/questions/" + pollId).set({
-    id: poll.id,
-    creation_date: creation_date.getTime(),
-    creator: creator,
-    question: poll.question,
+function addQuestionToDatabase(chatId, msgId, question, author) {
+  const creationDate = new Date();
+  database.ref(chatId + "/questions/" + msgId).set({
+    id: msgId,
+    creation_date: creationDate.getTime(),
+    author: author,
+    question: question,
   });
 }
 
@@ -95,7 +94,7 @@ function getUserName(sender) {
 
 module.exports = {
   setWelcomeMessage,
-  createQuestion,
+  addQuestionToDatabase,
   updateQuestion,
   getContentFromCommand,
   getWelcomeMessage,

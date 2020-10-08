@@ -37,10 +37,9 @@ bot.on("new_chat_members", async (msg) => {
 });
 
 bot.onText(/\/set_welcome/, (msg) => {
-  const chatId = msg.chat.id;
   const input = msg.text;
   const welcomeMessage = utils.getContentFromCommand("/set_welcome ", input);
-  utils.setWelcomeMessage(chatId, welcomeMessage);
+  utils.setWelcomeMessage(msg.chat.id, welcomeMessage);
 });
 
 bot.onText(/\/q/, async (msg) => {
@@ -51,18 +50,14 @@ bot.onText(/\/q/, async (msg) => {
       parse_mode: "HTML",
     });
   } else {
-    bot
-      .sendPoll(msg.chat.id, question, [utils.icons.like, utils.icons.dislike])
-      .then((payload) => {
-        if (databaseOn) {
-          utils.createQuestion(
-            msg.chat.id,
-            utils.getUserName(msg.chat),
-            payload.poll
-          );
-        }
-        console.log(payload.poll);
-      });
+    if (databaseOn) {
+      utils.addQuestionToDatabase(
+        msg.chat.id,
+        msg.message_id,
+        question,
+        utils.getUserName(msg.chat)
+      );
+    }
   }
 });
 
