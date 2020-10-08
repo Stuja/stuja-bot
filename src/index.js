@@ -26,11 +26,8 @@ bot.setWebHook(
 );
 
 bot.onText(/\/hola/, (msg) => {
-  // 'msg' is the received Message from Telegram
-  const chatId = msg.chat.id;
-
-  // send back a message with the name of the user
-  bot.sendMessage(chatId, "Hola " + msg.from.first_name);
+  const username = utils.getUserName(msg.from);
+  bot.sendMessage(msg.chat.id, "Hola " + username);
 });
 
 bot.on("new_chat_members", async (msg) => {
