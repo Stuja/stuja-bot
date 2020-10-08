@@ -89,7 +89,16 @@ function addAnswerToDatabase(
   });
   database
     .ref("/questions/" + chatId + "/" + questionId + "/answers")
-    .set({answer_id: answerId});
+    .set({ answer_id: answerId });
+}
+
+function updateAnswerOnDatabase(poll) {
+  database.ref("/answers/" + poll.id).update({
+    likes: poll.options[0].voter_count,
+    dislikes: poll.options[1].voter_count,
+    total_voter_count: poll.total_voter_count,
+  });
+  console.log(poll);
 }
 
 function getContentFromCommand(command, input) {
@@ -107,6 +116,7 @@ module.exports = {
   getContentFromCommand,
   getWelcomeMessage,
   getUserName,
+  updateAnswerOnDatabase,
   icons,
   errorsMessages,
   infoMessages,

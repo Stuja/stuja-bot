@@ -51,11 +51,12 @@ bot.onText(/\/q/, async (msg) => {
     });
   } else {
     if (databaseOn) {
+      console.log(utils.getUserName(msg.from));
       utils.addQuestionToDatabase(
         msg.chat.id,
         msg.message_id,
         question,
-        utils.getUserName(msg.chat)
+        utils.getUserName(msg.from)
       );
     }
   }
@@ -90,6 +91,10 @@ bot.onText(/\/a/, (msg) => {
       );
     });
   }
+});
+
+bot.on("poll", (poll) => {
+  utils.updateAnswerOnDatabase(poll);
 });
 
 bot.on("polling_error", (err) => console.log(err));
