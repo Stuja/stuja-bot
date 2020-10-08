@@ -61,25 +61,6 @@ bot.onText(/\/q/, async (msg) => {
   }
 });
 
-bot.onText(/\/stop/, (msg) => {
-  if (msg.reply_to_message != undefined) {
-    if (msg.reply_to_message.poll.is_closed) {
-      bot.sendMessage(msg.chat.id, utils.errorsMessages.closed_poll);
-    } else {
-      var replyMessageId = msg.reply_to_message.message_id;
-      if (databaseOn) {
-        utils.updateQuestion(msg.chat.id, msg.reply_to_message.poll);
-      }
-      bot.stopPoll(msg.chat.id, replyMessageId);
-      bot.sendMessage(msg.chat.id, utils.infoMessages.closed_poll);
-    }
-  } else {
-    bot.sendMessage(msg.chat.id, utils.errorsMessages.select_question, {
-      parse_mode: "HTML",
-    });
-  }
-});
-
 bot.onText(/\/a/, (msg) => {
   const input = msg.text;
   const answer = utils.getContentFromCommand("/a ", input);
