@@ -34,14 +34,9 @@ bot.onText(/\/hola/, (msg) => {
 });
 
 bot.on("new_chat_members", async (msg) => {
-  const chatId = msg.chat.id;
-  const username =
-    msg.new_chat_participant.username === undefined
-      ? msg.new_chat_participant.first_name
-      : msg.new_chat_participant.username;
-  console.log(username);
-  const welcomeMessage = await utils.getWelcomeMessage(chatId, username);
-  bot.sendMessage(chatId, welcomeMessage);
+  const username = utils.getUserName(msg.new_chat_participant);
+  const welcomeMessage = await utils.getWelcomeMessage(msg.chat.id, username);
+  bot.sendMessage(msg.chat.id, welcomeMessage);
 });
 
 bot.onText(/\/set_welcome/, (msg) => {
@@ -81,10 +76,7 @@ bot.onText(/\/stop/, (msg) => {
     } else {
       var replyMessageId = msg.reply_to_message.message_id;
       if (databaseOn) {
-        utils.updateQuestion(
-          msg.chat.id,
-          msg.reply_to_message.poll
-        );
+        utils.updateQuestion(msg.chat.id, msg.reply_to_message.poll);
       }
       bot.stopPoll(msg.chat.id, replyMessageId);
       bot.sendMessage(msg.chat.id, utils.infoMessages.closed_poll);
