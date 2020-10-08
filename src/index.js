@@ -74,7 +74,7 @@ bot.onText(/\/stop/, (msg) => {
       bot.sendMessage(msg.chat.id, utils.infoMessages.closed_poll);
     }
   } else {
-    bot.sendMessage(msg.chat.id, utils.errorsMessages.select_poll, {
+    bot.sendMessage(msg.chat.id, utils.errorsMessages.select_question, {
       parse_mode: "HTML",
     });
   }
@@ -83,16 +83,31 @@ bot.onText(/\/stop/, (msg) => {
 bot.onText(/\/a/, (msg) => {
   const input = msg.text;
   const answer = utils.getContentFromCommand("/a ", input);
-  const question = msg.reply_to_message.poll.question;
   if (answer === undefined) {
     bot.sendMessage(msg.chat.id, utils.errorsMessages.no_answer, {
       parse_mode: "HTML",
     });
+  } else if (msg.reply_to_message === undefined) {
+    bot.sendMessage(msg.chat.id, utils.errorsMessages.select_question, {
+      parse_mode: "HTML",
+    });
   } else {
+    const question = utils.getContentFromCommand(
+      "/q",
+      msg.reply_to_message.text
+    );
     bot.sendPoll(msg.chat.id, "Q: " + question + "\nA: " + answer, [
       utils.icons.like,
       utils.icons.dislike,
-    ]);
+    ]).then(payload => {
+      utils.addAnswerToDatabase(
+        msg.chat.id,
+        payload.poll.id,
+        answer,
+        utils.getUserName(msg.from),
+        msg.reply_to_message.message_id
+      );
+    });
   }
 });
 

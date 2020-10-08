@@ -27,10 +27,10 @@ const icons = {
 const errorsMessages = {
   closed_poll:
     icons.invalid_operation + " " + "La encuesta seleccionada ya está cerrada.",
-  select_poll:
+  select_question:
     icons.invalid_operation +
     " " +
-    "No has seleccionado ninguna encuesta: \n<code>Menciona la encuesta</code>",
+    "No has seleccionado ninguna encuesta: \n<code>Menciona la pregunta</code>",
   no_question:
     icons.invalid_operation +
     " " +
@@ -73,15 +73,21 @@ function addQuestionToDatabase(chatId, msgId, question, author) {
   });
 }
 
-function updateQuestion(chatId, poll) {
-  const ending_time = new Date();
-  const pollId = poll.id;
-  database.ref(chatId + "/questions/" + pollId).update({
-    ending_time: ending_time.getTime(),
-    likes: poll.options[0].voter_count,
-    dislikes: poll.options[1].voter_count,
-    total_voter_count: poll.total_voter_count,
-  });
+function addAnswerToDatabase(
+  chatId,
+  answerId,
+  answer,
+  answerAuthor,
+  questionId
+) {
+  const creationDate = new Date();
+  database
+    .ref(chatId + "/questions/" + questionId + "/answers/" + answerId)
+    .set({
+      creation_date: creationDate.getTime(),
+      answer: answer,
+      author: answerAuthor,
+    });
 }
 
 function getContentFromCommand(command, input) {
@@ -95,10 +101,11 @@ function getUserName(sender) {
 module.exports = {
   setWelcomeMessage,
   addQuestionToDatabase,
-  updateQuestion,
+  addAnswerToDatabase,
   getContentFromCommand,
   getWelcomeMessage,
   getUserName,
+  updateAnswerOnDatabase,
   icons,
   errorsMessages,
   infoMessages,
