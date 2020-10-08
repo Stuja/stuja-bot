@@ -45,17 +45,17 @@ const infoMessages = {
   closed_poll: icons.info + " " + "La encuesta ha concluido.",
 };
 
-function setWelcomeMessage(id, welcomeMessage) {
+function setWelcomeMessage(chatId, welcomeMessage) {
   const creation_date = new Date();
-  database.ref(id + "/welcome").set({
+  database.ref("/welcomes/" + chatId).set({
     welcome: welcomeMessage,
     date: creation_date.getTime(),
   });
 }
 
-async function getWelcomeMessage(id, username) {
+async function getWelcomeMessage(chatId, username) {
   return await database
-    .ref(id + "/welcome")
+    .ref("/welcomes/" + chatId)
     .child("welcome")
     .once("value")
     .then((snapshot) => {
@@ -65,8 +65,7 @@ async function getWelcomeMessage(id, username) {
 
 function addQuestionToDatabase(chatId, msgId, question, author) {
   const creationDate = new Date();
-  database.ref(chatId + "/questions/" + msgId).set({
-    id: msgId,
+  database.ref("/questions/" + chatId + "/" + msgId).set({
     creation_date: creationDate.getTime(),
     author: author,
     question: question,
@@ -81,13 +80,16 @@ function addAnswerToDatabase(
   questionId
 ) {
   const creationDate = new Date();
+  database.ref("/answers/" + answerId).set({
+    creation_date: creationDate.getTime(),
+    answer: answer,
+    author: answerAuthor,
+    chat_id: chatId,
+    question_id: questionId,
+  });
   database
-    .ref(chatId + "/questions/" + questionId + "/answers/" + answerId)
-    .set({
-      creation_date: creationDate.getTime(),
-      answer: answer,
-      author: answerAuthor,
-    });
+    .ref("/questions/" + chatId + "/" + questionId + "/answers")
+    .set({answer_id: answerId});
 }
 
 function getContentFromCommand(command, input) {
@@ -105,7 +107,6 @@ module.exports = {
   getContentFromCommand,
   getWelcomeMessage,
   getUserName,
-  updateAnswerOnDatabase,
   icons,
   errorsMessages,
   infoMessages,
