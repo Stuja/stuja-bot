@@ -34,11 +34,11 @@ const errorsMessages = {
   no_question:
     icons.invalid_operation +
     " " +
-    "Ups, no has hecho ninguna pregunta: \n<code>/q + pregunta</code>",
+    "Ups, no has hecho ninguna pregunta: \n<code>/question + pregunta</code>",
   no_answer:
     icons.invalid_operation +
     " " +
-    "Ups, no has respondido: \n<code>/a + respuesta</code>",
+    "Ups, no has respondido: \n<code>/answer + respuesta</code>",
 };
 
 const infoMessages = {

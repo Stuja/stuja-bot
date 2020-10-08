@@ -44,9 +44,9 @@ bot.onText(/\/set_welcome/, (msg) => {
   utils.setWelcomeMessage(msg.chat.id, welcomeMessage);
 });
 
-bot.onText(/\/q/, async (msg) => {
+bot.onText(/\/question/, async (msg) => {
   const input = msg.text;
-  const question = utils.getContentFromCommand("/q ", input);
+  const question = utils.getContentFromCommand("/question ", input);
   if (question === undefined) {
     bot.sendMessage(msg.chat.id, utils.errorsMessages.no_question, {
       parse_mode: "HTML",
@@ -63,9 +63,9 @@ bot.onText(/\/q/, async (msg) => {
   }
 });
 
-bot.onText(/\/a/, (msg) => {
+bot.onText(/\/answer/, (msg) => {
   const input = msg.text;
-  const answer = utils.getContentFromCommand("/a ", input);
+  const answer = utils.getContentFromCommand("/answer ", input);
   if (answer === undefined) {
     bot.sendMessage(msg.chat.id, utils.errorsMessages.no_answer, {
       parse_mode: "HTML",
@@ -76,7 +76,7 @@ bot.onText(/\/a/, (msg) => {
     });
   } else {
     const question = utils.getContentFromCommand(
-      "/q",
+      "/question",
       msg.reply_to_message.text
     );
     bot
