@@ -26,29 +26,22 @@ bot.setWebHook(
 );
 
 bot.onText(/\/hola/, (msg) => {
-  // 'msg' is the received Message from Telegram
-  const chatId = msg.chat.id;
-
-  // send back a message with the name of the user
-  bot.sendMessage(chatId, "Hola " + msg.from.first_name);
+  const username = utils.getUserName(msg.from);
+  bot.sendMessage(msg.chat.id, "Hola " + username);
 });
 
 bot.on("new_chat_members", async (msg) => {
-  const chatId = msg.chat.id;
-  const username =
-    msg.new_chat_participant.username === undefined
-      ? msg.new_chat_participant.first_name
-      : msg.new_chat_participant.username;
-  console.log(username);
-  const welcomeMessage = await utils.getWelcomeMessage(chatId, username);
-  bot.sendMessage(chatId, welcomeMessage);
+  const username = utils.getUserName(msg.new_chat_participant);
+  const welcomeMessage = await utils.getWelcomeMessage(msg.chat.id, username);
+  if (welcomeMessage != undefined) {
+    bot.sendMessage(msg.chat.id, welcomeMessage);
+  }
 });
 
 bot.onText(/\/set_welcome/, (msg) => {
-  const chatId = msg.chat.id;
   const input = msg.text;
   const welcomeMessage = utils.getContentFromCommand("/set_welcome ", input);
-  utils.setWelcomeMessage(chatId, welcomeMessage);
+  utils.setWelcomeMessage(msg.chat.id, welcomeMessage);
 });
 
 bot.onText(/\/q/, async (msg) => {
@@ -59,57 +52,56 @@ bot.onText(/\/q/, async (msg) => {
       parse_mode: "HTML",
     });
   } else {
-    bot
-      .sendPoll(msg.chat.id, question, [utils.icons.like, utils.icons.dislike])
-      .then((payload) => {
-        if (databaseOn) {
-          utils.createQuestion(
-            msg.chat.id,
-            utils.getUserName(msg.chat),
-            payload.poll
-          );
-        }
-        console.log(payload.poll);
-      });
-  }
-});
-
-bot.onText(/\/stop/, (msg) => {
-  if (msg.reply_to_message != undefined) {
-    if (msg.reply_to_message.poll.is_closed) {
-      bot.sendMessage(msg.chat.id, utils.errorsMessages.closed_poll);
-    } else {
-      var replyMessageId = msg.reply_to_message.message_id;
-      if (databaseOn) {
-        utils.updateQuestion(
-          msg.chat.id,
-          msg.reply_to_message.poll
-        );
-      }
-      bot.stopPoll(msg.chat.id, replyMessageId);
-      bot.sendMessage(msg.chat.id, utils.infoMessages.closed_poll);
+    if (databaseOn) {
+      utils.addQuestionToDatabase(
+        msg.chat.id,
+        msg.message_id,
+        question,
+        utils.getUserName(msg.from)
+      );
     }
-  } else {
-    bot.sendMessage(msg.chat.id, utils.errorsMessages.select_poll, {
-      parse_mode: "HTML",
-    });
   }
 });
 
 bot.onText(/\/a/, (msg) => {
   const input = msg.text;
   const answer = utils.getContentFromCommand("/a ", input);
-  const question = msg.reply_to_message.poll.question;
   if (answer === undefined) {
     bot.sendMessage(msg.chat.id, utils.errorsMessages.no_answer, {
       parse_mode: "HTML",
     });
+  } else if (msg.reply_to_message === undefined) {
+    bot.sendMessage(msg.chat.id, utils.errorsMessages.select_question, {
+      parse_mode: "HTML",
+    });
   } else {
-    bot.sendPoll(msg.chat.id, "Q: " + question + "\nA: " + answer, [
-      utils.icons.like,
-      utils.icons.dislike,
-    ]);
+    const question = utils.getContentFromCommand(
+      "/q",
+      msg.reply_to_message.text
+    );
+    bot
+      .sendPoll(msg.chat.id, "Q: " + question + "\nA: " + answer, [
+        utils.icons.like,
+        utils.icons.dislike,
+      ])
+      .then((payload) => {
+        utils.addAnswerToDatabase(
+          msg.chat.id,
+          payload.poll.id,
+          answer,
+          utils.getUserName(msg.from),
+          msg.reply_to_message.message_id
+        );
+      });
   }
+});
+
+bot.on("poll", (poll) => {
+  utils.updateAnswerOnDatabase(poll);
+});
+
+bot.onText(/\/list/, (msg) => {
+  utils.getLastsQuestionsFromDatabase(msg.chat.id);
 });
 
 bot.on("polling_error", (err) => console.log(err));

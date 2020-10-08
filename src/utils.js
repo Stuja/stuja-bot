@@ -27,10 +27,10 @@ const icons = {
 const errorsMessages = {
   closed_poll:
     icons.invalid_operation + " " + "La encuesta seleccionada ya está cerrada.",
-  select_poll:
+  select_question:
     icons.invalid_operation +
     " " +
-    "No has seleccionado ninguna encuesta: \n<code>Menciona la encuesta</code>",
+    "No has seleccionado ninguna encuesta: \n<code>Menciona la pregunta</code>",
   no_question:
     icons.invalid_operation +
     " " +
@@ -43,42 +43,70 @@ const errorsMessages = {
 
 const infoMessages = {
   closed_poll: icons.info + " " + "La encuesta ha concluido.",
+  no_questions: icons.info + " " + "Aún no hay preguntas.S",
 };
 
-function setWelcomeMessage(id, welcomeMessage) {
+function setWelcomeMessage(chatId, welcomeMessage) {
   const creation_date = new Date();
-  database.ref(id + "/welcome").set({
+  database.ref("/chats/" + chatId + "/welcome/").set({
     welcome: welcomeMessage,
     date: creation_date.getTime(),
   });
 }
 
-async function getWelcomeMessage(id, username) {
+async function getWelcomeMessage(chatId, username) {
   return await database
-    .ref(id + "/welcome")
+    .ref("/chats/" + chatId + "/welcome/")
     .child("welcome")
     .once("value")
     .then((snapshot) => {
-      return snapshot.val().replace("$username", username);
+      if (snapshot.val() != null) {
+        return snapshot.val().replace("$username", username);
+      } else {
+        return undefined;
+      }
     });
 }
 
-function createQuestion(chatId, creator, poll) {
-  const creation_date = new Date();
-  const pollId = poll.id;
-  database.ref(chatId + "/questions/" + pollId).set({
-    id: poll.id,
-    creation_date: creation_date.getTime(),
-    creator: creator,
-    question: poll.question,
+function getQuestionHash(chatId, msgId) {
+  return String.prototype.concat(chatId, msgId);
+}
+
+function addQuestionToDatabase(chatId, msgId, question, author) {
+  const creationDate = new Date();
+  const questionHash = getQuestionHash(chatId, msgId);
+  database.ref("/questions/" + questionHash).set({
+    creation_date: creationDate.getTime(),
+    author: author,
+    question: question,
+  });
+  database.ref("/chats/" + chatId + "/questions/" + questionHash).set({
+    question_id: questionHash,
   });
 }
 
-function updateQuestion(chatId, poll) {
-  const ending_time = new Date();
-  const pollId = poll.id;
-  database.ref(chatId + "/questions/" + pollId).update({
-    ending_time: ending_time.getTime(),
+function addAnswerToDatabase(
+  chatId,
+  answerId,
+  answer,
+  answerAuthor,
+  questionId
+) {
+  const creationDate = new Date();
+  const questionHash = getQuestionHash(chatId, questionId);
+  database.ref("/answers/" + answerId).set({
+    creation_date: creationDate.getTime(),
+    answer: answer,
+    author: answerAuthor,
+    question_id: questionHash,
+  });
+  database.ref("/questions/" + questionHash + "/answers/" + answerId).set({
+    answer_id: answerId,
+  });
+}
+
+function updateAnswerOnDatabase(poll) {
+  database.ref("/answers/" + poll.id).update({
     likes: poll.options[0].voter_count,
     dislikes: poll.options[1].voter_count,
     total_voter_count: poll.total_voter_count,
@@ -93,13 +121,25 @@ function getUserName(sender) {
   return sender.username === undefined ? sender.first_name : sender.username;
 }
 
+async function getLastsQuestionsFromDatabase(chatId) {
+  console.log("====");
+  const data =  await database
+    .ref("chats/" + chatId + "/questions/")
+    .orderByKey()
+    .limitToLast(5).on("child_added", snapshot =>{
+      console.log(snapshot.val().question_id);
+    });
+}
+
 module.exports = {
   setWelcomeMessage,
-  createQuestion,
-  updateQuestion,
+  addQuestionToDatabase,
+  addAnswerToDatabase,
   getContentFromCommand,
   getWelcomeMessage,
   getUserName,
+  updateAnswerOnDatabase,
+  getLastsQuestionsFromDatabase,
   icons,
   errorsMessages,
   infoMessages,
