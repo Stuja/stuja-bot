@@ -34,11 +34,11 @@ const errorsMessages = {
   no_question:
     icons.invalid_operation +
     " " +
-    "Ups, no has hecho ninguna pregunta: \n<code>/q + pregunta</code>",
+    "Ups, no has hecho ninguna pregunta: \n<code>/question + pregunta</code>",
   no_answer:
     icons.invalid_operation +
     " " +
-    "Ups, no has respondido: \n<code>/a + respuesta</code>",
+    "Ups, no has respondido: \n<code>/answer + respuesta</code>",
 };
 
 const infoMessages = {
@@ -81,7 +81,7 @@ function addQuestionToDatabase(chatId, msgId, question, author) {
     question: question,
   });
   database.ref("/chats/" + chatId + "/questions/" + questionHash).set({
-    question_id: questionHash,
+    question_hash: questionHash,
   });
 }
 
@@ -121,16 +121,6 @@ function getUserName(sender) {
   return sender.username === undefined ? sender.first_name : sender.username;
 }
 
-async function getLastsQuestionsFromDatabase(chatId) {
-  console.log("====");
-  const data =  await database
-    .ref("chats/" + chatId + "/questions/")
-    .orderByKey()
-    .limitToLast(5).on("child_added", snapshot =>{
-      console.log(snapshot.val().question_id);
-    });
-}
-
 module.exports = {
   setWelcomeMessage,
   addQuestionToDatabase,
@@ -139,7 +129,6 @@ module.exports = {
   getWelcomeMessage,
   getUserName,
   updateAnswerOnDatabase,
-  getLastsQuestionsFromDatabase,
   icons,
   errorsMessages,
   infoMessages,
