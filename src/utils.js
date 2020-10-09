@@ -22,6 +22,8 @@ const icons = {
   invalid_operation: "⚠️",
   successfull_operation: "🚀",
   info: "ℹ️",
+  thanks: "🙌",
+  link: "🔗",
 };
 
 const errorsMessages = {
@@ -34,17 +36,43 @@ const errorsMessages = {
   no_question:
     icons.invalid_operation +
     " " +
-    "Ups, no has hecho ninguna pregunta: \n<code>/q + pregunta</code>",
+    "Ups, no has hecho ninguna pregunta: \n<code>/question + pregunta</code>",
   no_answer:
     icons.invalid_operation +
     " " +
-    "Ups, no has respondido: \n<code>/a + respuesta</code>",
+    "Ups, no has respondido: \n<code>/answer + respuesta</code>",
+  no_suggestion:
+    icons.invalid_operation +
+    " " +
+    "Ups, no has sugerido nada: \n<code>/please_add + sugerencia</code>",
 };
 
 const infoMessages = {
   closed_poll: icons.info + " " + "La encuesta ha concluido.",
   no_questions: icons.info + " " + "Aún no hay preguntas.S",
+  suggestion_thanks:
+    "Sugerencia registrada.\n" +
+    icons.thanks +
+    " " +
+    "¡Muchas gracias por tu sugerencia $username!",
 };
+
+const helpInfo =
+  "<b>Stuja-bot, tu bot de clase.</b>\n" +
+  "Comandos:\n\n" +
+  "<code>/question + pregunta</code> - Haz una pregunta\n" +
+  "<code>/answer + respuesta</code> - Responde a una pregunta mencionándola\n" +
+  "<code>/please_add + sugerencia</code> - Sugiere una nueva funcionalidad\n" +
+  "<code>/set_welcome + mensaje de bienvenida</code> - Añade un mensaje de bienvenida\n" +
+  "<code>/help</code> - Mostrar ayuda\n\n" +
+  "Puedes usar <code>$username</code> para customizar el mensaje de bienvenida.\n" +
+  icons.link +
+  " " +
+  `<a href="https://github.com/stuja/stuja-bot">Código fuente de Stuja-bot</a>`;
+
+function customizeMesage(msg, username) {
+  return msg.replace("$username", username);
+}
 
 function setWelcomeMessage(chatId, welcomeMessage) {
   const creation_date = new Date();
@@ -61,7 +89,7 @@ async function getWelcomeMessage(chatId, username) {
     .once("value")
     .then((snapshot) => {
       if (snapshot.val() != null) {
-        return snapshot.val().replace("$username", username);
+        return customizeMesage(snapshot.val(), username);
       } else {
         return undefined;
       }
@@ -81,7 +109,7 @@ function addQuestionToDatabase(chatId, msgId, question, author) {
     question: question,
   });
   database.ref("/chats/" + chatId + "/questions/" + questionHash).set({
-    question_id: questionHash,
+    question_hash: questionHash,
   });
 }
 
@@ -121,14 +149,10 @@ function getUserName(sender) {
   return sender.username === undefined ? sender.first_name : sender.username;
 }
 
-async function getLastsQuestionsFromDatabase(chatId) {
-  console.log("====");
-  const data =  await database
-    .ref("chats/" + chatId + "/questions/")
-    .orderByKey()
-    .limitToLast(5).on("child_added", snapshot =>{
-      console.log(snapshot.val().question_id);
-    });
+function addSuggestionToDatabase(chatId, suggestion, suggestionId) {
+  database.ref("chats/" + chatId + "/suggestions/" + suggestionId).set({
+    suggestion: suggestion,
+  });
 }
 
 module.exports = {
@@ -139,7 +163,9 @@ module.exports = {
   getWelcomeMessage,
   getUserName,
   updateAnswerOnDatabase,
-  getLastsQuestionsFromDatabase,
+  addSuggestionToDatabase,
+  customizeMesage,
+  helpInfo,
   icons,
   errorsMessages,
   infoMessages,
