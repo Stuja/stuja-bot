@@ -115,6 +115,12 @@ bot.onText(/\/please_add/, (msg) => {
   }
 });
 
+bot.onText(/\/help/, (msg) => {
+    bot.sendMessage(msg.chat.id, utils.helpInfo, {
+      parse_mode: "HTML",
+    });
+});
+
 bot.on("poll", (poll) => {
   utils.updateAnswerOnDatabase(poll);
 });

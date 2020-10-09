@@ -56,6 +56,16 @@ const infoMessages = {
     "¡Muchas gracias por tu sugerencia $username!",
 };
 
+const helpInfo =
+  "<b>Stuja-bot, tu bot de clase.</b>\n" +
+  "Comandos:\n\n" +
+  "<code>/question + pregunta</code> - Haz una pregunta\n" +
+  "<code>/answer + respuesta</code> - Responde a una pregunta mencionándola\n" +
+  "<code>/please_add + sugerencia</code> - Sugiere una nueva funcionalidad\n" +
+  "<code>/set_welcome + mensaje de bienvenida</code> - Añade un mensaje de bienvenida\n" +
+  "<code>/help</code> - Mostrar ayuda\n\n" +
+  "Puedes usar <code>$username</code> para customizar el mensaje de bienvenida.";
+
 function customizeMesage(msg, username) {
   return msg.replace("$username", username);
 }
@@ -151,6 +161,7 @@ module.exports = {
   updateAnswerOnDatabase,
   addSuggestionToDatabase,
   customizeMesage,
+  helpInfo,
   icons,
   errorsMessages,
   infoMessages,
