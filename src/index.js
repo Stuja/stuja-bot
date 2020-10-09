@@ -116,9 +116,9 @@ bot.onText(/\/please_add/, (msg) => {
 });
 
 bot.onText(/\/help/, (msg) => {
-    bot.sendMessage(msg.chat.id, utils.helpInfo, {
-      parse_mode: "HTML",
-    });
+  bot.sendMessage(msg.chat.id, utils.helpInfo, {
+    parse_mode: "HTML", disable_web_page_preview: true,
+  });
 });
 
 bot.on("poll", (poll) => {

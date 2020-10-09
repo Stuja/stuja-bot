@@ -23,6 +23,7 @@ const icons = {
   successfull_operation: "🚀",
   info: "ℹ️",
   thanks: "🙌",
+  link: "🔗",
 };
 
 const errorsMessages = {
@@ -64,7 +65,10 @@ const helpInfo =
   "<code>/please_add + sugerencia</code> - Sugiere una nueva funcionalidad\n" +
   "<code>/set_welcome + mensaje de bienvenida</code> - Añade un mensaje de bienvenida\n" +
   "<code>/help</code> - Mostrar ayuda\n\n" +
-  "Puedes usar <code>$username</code> para customizar el mensaje de bienvenida.";
+  "Puedes usar <code>$username</code> para customizar el mensaje de bienvenida.\n" +
+  icons.link +
+  " " +
+  `<a href="https://github.com/stuja/stuja-bot">Código fuente de Stuja-bot</a>`;
 
 function customizeMesage(msg, username) {
   return msg.replace("$username", username);
