@@ -45,16 +45,21 @@ const errorsMessages = {
     icons.invalid_operation +
     " " +
     "Ups, no has sugerido nada: \n<code>/please_add + sugerencia</code>",
+  no_welcome:
+    icons.invalid_operation +
+    " " +
+    "Ups, no has añadido un mensaje de bienvenida: \n<code>/set_welcome + mensaje de bienvenida</code>",
 };
 
 const infoMessages = {
   closed_poll: icons.info + " " + "La encuesta ha concluido.",
-  no_questions: icons.info + " " + "Aún no hay preguntas.S",
+  no_questions: icons.info + " " + "Aún no hay preguntas.",
   suggestion_thanks:
     "Sugerencia registrada.\n" +
     icons.thanks +
     " " +
     "¡Muchas gracias por tu sugerencia $username!",
+  updated_welcome: icons.info + " " + "Mensaje de bienvenida añadido.",
 };
 
 const helpInfo =

@@ -41,7 +41,16 @@ bot.on("new_chat_members", async (msg) => {
 bot.onText(/\/set_welcome/, (msg) => {
   const input = msg.text;
   const welcomeMessage = utils.getContentFromCommand("/set_welcome ", input);
-  utils.setWelcomeMessage(msg.chat.id, welcomeMessage);
+  if(welcomeMessage!=undefined){
+    utils.setWelcomeMessage(msg.chat.id, welcomeMessage);
+    bot.sendMessage(msg.chat.id, utils.infoMessages.updated_welcome, {
+      parse_mode: "HTML",
+    });
+  }else{
+    bot.sendMessage(msg.chat.id, utils.errorsMessages.no_welcome, {
+      parse_mode: "HTML",
+    });
+  }
 });
 
 bot.onText(/\/question/, async (msg) => {
