@@ -5,7 +5,7 @@ const config = require("./config");
 const token = config.telegramToken;
 var utils = require("./utils.js");
 
-const runningLocal = false;
+const runningLocal = true;
 const databaseOn = true;
 
 var options;
@@ -100,8 +100,14 @@ bot.on("poll", (poll) => {
   utils.updateAnswerOnDatabase(poll);
 });
 
-bot.onText(/\/list/, (msg) => {
-  utils.getLastsQuestionsFromDatabase(msg.chat.id);
+bot.onText(/\/list_answers/, async (msg) => {
+  console.log("Comienzo")
+  let questionsList = await utils.getLastsQuestionsFromDatabase(msg.chat.id);
+  console.log(questionsList);
+  // bot.sendMessage(
+  //   msg.chat.id,
+  //   questionsList
+  // );
 });
 
 bot.on("polling_error", (err) => console.log(err));

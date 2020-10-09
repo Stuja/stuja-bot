@@ -81,7 +81,7 @@ function addQuestionToDatabase(chatId, msgId, question, author) {
     question: question,
   });
   database.ref("/chats/" + chatId + "/questions/" + questionHash).set({
-    question_id: questionHash,
+    question_hash: questionHash,
   });
 }
 
@@ -122,13 +122,56 @@ function getUserName(sender) {
 }
 
 async function getLastsQuestionsFromDatabase(chatId) {
-  console.log("====");
-  const data =  await database
+  var response = "";
+  database
     .ref("chats/" + chatId + "/questions/")
     .orderByKey()
-    .limitToLast(5).on("child_added", snapshot =>{
-      console.log(snapshot.val().question_id);
+    .limitToLast(5)
+    .on("child_added", async (snapshot) => {
+      //console.log(snapshot.val());
+      let questions = [];
+      await database
+        .ref("/questions/")
+        .child(snapshot.val().question_hash)
+        .once("value")
+        .then((snapQuestion) => {
+          questions.push(snapQuestion.val());
+        });
+      //console.log(questions);
+      questions.forEach((question) => {
+        response += "Q: " + question.question + "\n";
+        //console.log(question.answer);
+        if (question.answers != undefined) {
+          //console.log(question.answers);
+          for (let answerId in question.answers) {
+            database
+              .ref("/answers/")
+              .child(answerId)
+              .once("value")
+              .then((snapAnswer) => {
+                //console.log(snapAnswer.val());
+                const Answer = snapAnswer.val();
+                console.log(Answer);
+                response +=
+                  "A: " +
+                  Answer.answer +
+                  " (" +
+                  Answer.likes +
+                  " " +
+                  icons.like +
+                  "| " +
+                  Answer.dislikes +
+                  " " +
+                  icons.dislike +
+                  ")\n";
+              });
+          }
+        }
+        response+="\n";
+        //console.log(response);
+      });
     });
+  return response;
 }
 
 module.exports = {
