@@ -58,7 +58,7 @@ const infoMessages = {
 };
 
 const helpInfo =
-  "<b>Stuja-bot, tu bot de clase.</b>\n" +
+  "<b>stuja-bot, tu bot de clase.</b>\n" +
   "Comandos:\n\n" +
   "<code>/question + pregunta</code> - Haz una pregunta\n" +
   "<code>/answer + respuesta</code> - Responde a una pregunta mencionándola\n" +
@@ -68,7 +68,7 @@ const helpInfo =
   "Puedes usar <code>$username</code> para customizar el mensaje de bienvenida.\n" +
   icons.link +
   " " +
-  `<a href="https://github.com/stuja/stuja-bot">Código fuente de Stuja-bot</a>`;
+  `<a href="https://github.com/stuja/stuja-bot">Código fuente de stuja-bot</a>`;
 
 function customizeMesage(msg, username) {
   return msg.replace("$username", username);
