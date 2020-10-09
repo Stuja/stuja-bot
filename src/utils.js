@@ -27,12 +27,10 @@ const icons = {
 };
 
 const errorsMessages = {
-  closed_poll:
-    icons.invalid_operation + " " + "La encuesta seleccionada ya está cerrada.",
   select_question:
     icons.invalid_operation +
     " " +
-    "No has seleccionado ninguna encuesta: \n<code>Menciona la pregunta</code>",
+    "No has seleccionado ninguna pregunta: \n<code>Menciona la pregunta</code>",
   no_question:
     icons.invalid_operation +
     " " +
@@ -52,7 +50,6 @@ const errorsMessages = {
 };
 
 const infoMessages = {
-  closed_poll: icons.info + " " + "La encuesta ha concluido.",
   no_questions: icons.info + " " + "Aún no hay preguntas.",
   suggestion_thanks:
     "Sugerencia registrada.\n" +
