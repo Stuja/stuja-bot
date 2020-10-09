@@ -22,6 +22,7 @@ const icons = {
   invalid_operation: "⚠️",
   successfull_operation: "🚀",
   info: "ℹ️",
+  thanks: "🙌",
 };
 
 const errorsMessages = {
@@ -39,12 +40,25 @@ const errorsMessages = {
     icons.invalid_operation +
     " " +
     "Ups, no has respondido: \n<code>/answer + respuesta</code>",
+  no_suggestion:
+    icons.invalid_operation +
+    " " +
+    "Ups, no has sugerido nada: \n<code>/please_add + sugerencia</code>",
 };
 
 const infoMessages = {
   closed_poll: icons.info + " " + "La encuesta ha concluido.",
   no_questions: icons.info + " " + "Aún no hay preguntas.S",
+  suggestion_thanks:
+    "Sugerencia registrada.\n" +
+    icons.thanks +
+    " " +
+    "¡Muchas gracias por tu sugerencia $username!",
 };
+
+function customizeMesage(msg, username) {
+  return msg.replace("$username", username);
+}
 
 function setWelcomeMessage(chatId, welcomeMessage) {
   const creation_date = new Date();
@@ -61,7 +75,7 @@ async function getWelcomeMessage(chatId, username) {
     .once("value")
     .then((snapshot) => {
       if (snapshot.val() != null) {
-        return snapshot.val().replace("$username", username);
+        return customizeMesage(snapshot.val(), username);
       } else {
         return undefined;
       }
@@ -121,6 +135,12 @@ function getUserName(sender) {
   return sender.username === undefined ? sender.first_name : sender.username;
 }
 
+function addSuggestionToDatabase(chatId, suggestion, suggestionId) {
+  database.ref("chats/" + chatId + "/suggestions/" + suggestionId).set({
+    suggestion: suggestion,
+  });
+}
+
 module.exports = {
   setWelcomeMessage,
   addQuestionToDatabase,
@@ -129,6 +149,8 @@ module.exports = {
   getWelcomeMessage,
   getUserName,
   updateAnswerOnDatabase,
+  addSuggestionToDatabase,
+  customizeMesage,
   icons,
   errorsMessages,
   infoMessages,

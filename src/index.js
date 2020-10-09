@@ -96,6 +96,25 @@ bot.onText(/\/answer/, (msg) => {
   }
 });
 
+bot.onText(/\/please_add/, (msg) => {
+  const input = msg.text;
+  const suggestion = utils.getContentFromCommand("/please_add ", input);
+  if (suggestion != undefined) {
+    utils.addSuggestionToDatabase(msg.chat.id, suggestion, msg.message_id);
+    bot.sendMessage(
+      msg.chat.id,
+      utils.customizeMesage(
+        utils.infoMessages.suggestion_thanks,
+        utils.getUserName(msg.from)
+      )
+    );
+  } else {
+    bot.sendMessage(msg.chat.id, utils.errorsMessages.no_suggestion, {
+      parse_mode: "HTML",
+    });
+  }
+});
+
 bot.on("poll", (poll) => {
   utils.updateAnswerOnDatabase(poll);
 });
