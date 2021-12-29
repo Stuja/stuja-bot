@@ -11,9 +11,6 @@
     <br/> <br/>
 </p>
 
-
-State: `In progress`
-
 ## Installation ⚒️
 
 1. **Clone** the project
